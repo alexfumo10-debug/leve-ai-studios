@@ -236,22 +236,40 @@ export default function Home() {
 
           <form
             className="mt-14 space-y-5"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={(e) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              const data = new FormData(form);
+              const name = String(data.get("name") ?? "").trim();
+              const email = String(data.get("email") ?? "").trim();
+              const message = String(data.get("message") ?? "").trim();
+              const subject = `New inquiry from ${name || "levestudios.com"}`;
+              const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
+              window.location.href = `mailto:AF@levestudios.com?subject=${encodeURIComponent(
+                subject
+              )}&body=${encodeURIComponent(body)}`;
+            }}
           >
             <div className="grid gap-5 sm:grid-cols-2">
               <input
                 type="text"
+                name="name"
+                required
                 placeholder="Name"
                 className="w-full rounded-xl border-0 bg-white px-5 py-4 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b] outline-none ring-1 ring-[#d2d2d7] focus:ring-2 focus:ring-primary transition-all"
               />
               <input
                 type="email"
+                name="email"
+                required
                 placeholder="Email"
                 className="w-full rounded-xl border-0 bg-white px-5 py-4 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b] outline-none ring-1 ring-[#d2d2d7] focus:ring-2 focus:ring-primary transition-all"
               />
             </div>
             <textarea
               rows={5}
+              name="message"
+              required
               placeholder="Tell us about your project..."
               className="w-full rounded-xl border-0 bg-white px-5 py-4 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b] outline-none ring-1 ring-[#d2d2d7] focus:ring-2 focus:ring-primary transition-all resize-none"
             />
@@ -264,6 +282,16 @@ export default function Home() {
               </button>
             </div>
           </form>
+
+          <p className="mt-8 text-center text-[13px] text-[#86868b]">
+            Or reach us directly at{" "}
+            <a
+              href="mailto:AF@levestudios.com"
+              className="text-primary hover:underline"
+            >
+              AF@levestudios.com
+            </a>
+          </p>
 
         </div>
       </section>
