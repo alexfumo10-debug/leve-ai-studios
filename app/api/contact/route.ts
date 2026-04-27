@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 
+// Force Node.js runtime (not Edge) — Edge has stricter networking that
+// some external services treat as bot traffic.
+export const runtime = "nodejs";
+
 // Server-side only — destination email is never exposed to the client bundle.
-// Uses Formsubmit (free, no API key). On first submission, an activation email
-// is sent to the destination address; click the activation link once and all
-// future submissions forward silently.
-//
-// To swap providers later (Resend, Formspree, custom SMTP), only this file
-// needs to change — the public form posts to /api/contact regardless.
+// Tries Formsubmit first, then falls back to logging the submission to the
+// server console (visible in Vercel function logs) so messages never silently
+// vanish even if the upstream provider misbehaves.
 const DESTINATION_EMAIL =
   process.env.CONTACT_DESTINATION ?? "AF@levestudios.com";
 
@@ -28,36 +29,50 @@ export async function POST(request: Request) {
       DESTINATION_EMAIL
     )}`;
 
-    const upstream = await fetch(formsubmitUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        // Formsubmit's anti-spam requires a Referer/Origin from a real site.
-        Referer: "https://www.levestudios.com",
-        Origin: "https://www.levestudios.com",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        message,
-        _subject: `New inquiry from ${name} — levestudios.com`,
-        _template: "table",
-        _captcha: "false",
-      }),
-    });
+    let upstreamStatus: number | null = null;
+    let upstreamBody = "";
 
-    if (!upstream.ok) {
-      return NextResponse.json(
-        { ok: false, error: "Upstream submission failed." },
-        { status: 502 }
-      );
+    try {
+      const upstream = await fetch(formsubmitUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Referer: "https://www.levestudios.com",
+          Origin: "https://www.levestudios.com",
+          "User-Agent":
+            "Mozilla/5.0 (compatible; levestudios.com contact form)",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _subject: `New inquiry from ${name} — levestudios.com`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+
+      upstreamStatus = upstream.status;
+      upstreamBody = await upstream.text();
+    } catch (fetchErr) {
+      console.error("[contact] upstream fetch threw:", fetchErr);
     }
 
-    // Formsubmit returns HTTP 200 even for the one-time activation flow —
-    // its body says success: "false" with an activation message. We treat
-    // both real submissions and activation-pending as "queued" for the
-    // visitor (no need to expose internal mechanics).
+    // Always log the submission server-side so it's never lost, even if the
+    // upstream provider has issues. These appear in Vercel's function logs.
+    console.log("[contact] submission", {
+      name,
+      email,
+      message,
+      upstreamStatus,
+      upstreamBody: upstreamBody.slice(0, 500),
+    });
+
+    // Treat any HTTP 200 from Formsubmit as accepted (covers both real
+    // delivery and activation-pending state). Anything else still returns
+    // ok to the visitor — we have the submission in logs and will follow up
+    // out-of-band if upstream silently dropped it.
     return NextResponse.json({ ok: true });
   } catch (err) {
     return NextResponse.json(
