@@ -33,6 +33,9 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        // Formsubmit's anti-spam requires a Referer/Origin from a real site.
+        Referer: "https://www.levestudios.com",
+        Origin: "https://www.levestudios.com",
       },
       body: JSON.stringify({
         name,
@@ -51,6 +54,10 @@ export async function POST(request: Request) {
       );
     }
 
+    // Formsubmit returns HTTP 200 even for the one-time activation flow —
+    // its body says success: "false" with an activation message. We treat
+    // both real submissions and activation-pending as "queued" for the
+    // visitor (no need to expose internal mechanics).
     return NextResponse.json({ ok: true });
   } catch (err) {
     return NextResponse.json(
