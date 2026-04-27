@@ -1,6 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 export default function Home() {
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
   return (
     <>
       {/* ── Navbar ── */}
@@ -47,15 +52,15 @@ export default function Home() {
 
       {/* ── Hero ── */}
       <section className="flex min-h-[100dvh] flex-col items-center justify-center px-6 pt-12">
-        <div className="mx-auto max-w-[680px] text-center fade-up">
+        <div className="mx-auto max-w-[760px] text-center fade-up">
           <h1 className="text-[56px] font-semibold leading-[1.05] tracking-[-0.015em] text-[#1d1d1f] sm:text-[72px] lg:text-[80px]">
-            Intelligence,
+            Apps, intelligently
             <br />
-            applied.
+            built.
           </h1>
           <p className="mt-7 text-[21px] font-normal leading-[1.38] text-[#86868b]">
-            Leve AI Studios helps businesses design, build, and ship
-            AI&#8209;powered products that actually work.
+            We design and ship mobile and web apps — and help businesses
+            bring AI into the products they already have.
           </p>
           <div className="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:justify-center">
             <a
@@ -65,10 +70,10 @@ export default function Home() {
               Start a project
             </a>
             <a
-              href="#services"
+              href="#work"
               className="group text-[17px] font-normal text-primary hover:underline"
             >
-              Learn more&ensp;
+              See our work&ensp;
               <span className="inline-block transition-transform group-hover:translate-x-0.5">&rsaquo;</span>
             </a>
           </div>
@@ -79,30 +84,24 @@ export default function Home() {
       <section id="services" className="scroll-mt-12 bg-[#f5f5f7] py-28 px-6 lg:py-36">
         <div className="mx-auto max-w-[980px]">
           <h2 className="text-center text-[40px] font-semibold leading-[1.1] tracking-tight text-[#1d1d1f] sm:text-[48px]">
-            Everything AI.<br className="sm:hidden" /> One&nbsp;Studio.
+            Two things.<br className="sm:hidden" /> Done&nbsp;well.
           </h2>
-          <p className="mx-auto mt-6 max-w-[520px] text-center text-[17px] leading-[1.47] text-[#86868b]">
-            From strategy through deployment, we bring the full stack of AI
-            expertise to your business.
+          <p className="mx-auto mt-6 max-w-[560px] text-center text-[17px] leading-[1.47] text-[#86868b]">
+            We focus on what we&apos;re great at — building apps from scratch,
+            and bringing AI into businesses that already exist.
           </p>
 
           <div className="mt-20 grid gap-6 sm:grid-cols-2">
             {[
               {
-                title: "AI Strategy & Consulting",
-                desc: "Feasibility assessments, technology selection, and implementation roadmaps that help you invest in what matters.",
+                title: "App Development",
+                desc: "End-to-end design and development of mobile and web apps. From zero-to-one MVPs to production systems on the App Store. Native iOS, Android, and modern web stacks.",
+                bullets: ["iOS &amp; Android", "Web apps", "UX &amp; product design", "App Store launch"],
               },
               {
-                title: "Custom AI Products",
-                desc: "End-to-end design and development of AI-powered applications — from intelligent assistants to ML pipelines.",
-              },
-              {
-                title: "LLM & Agent Systems",
-                desc: "Production-grade chatbots, autonomous agents, RAG pipelines, and custom fine-tuning built on large language models.",
-              },
-              {
-                title: "AI Mobile & Web Apps",
-                desc: "Full-stack development of mobile and web applications with AI at the core — from concept to App Store.",
+                title: "AI Implementation",
+                desc: "We bring AI into your existing business — chatbots, agents, RAG systems, internal copilots, and intelligent automation. Add intelligence to what you&apos;ve already built.",
+                bullets: ["LLM integrations", "Custom AI agents", "RAG &amp; knowledge bases", "Workflow automation"],
               },
             ].map((s) => (
               <div
@@ -110,56 +109,128 @@ export default function Home() {
                 className="rounded-3xl bg-white p-10 sm:p-12 transition-shadow hover:shadow-lg"
               >
                 <h3 className="text-[24px] font-semibold leading-[1.17] text-[#1d1d1f]">{s.title}</h3>
-                <p className="mt-4 text-[15px] leading-[1.53] text-[#86868b]">{s.desc}</p>
+                <p
+                  className="mt-4 text-[15px] leading-[1.53] text-[#86868b]"
+                  dangerouslySetInnerHTML={{ __html: s.desc }}
+                />
+                <ul className="mt-6 space-y-2">
+                  {s.bullets.map((b) => (
+                    <li
+                      key={b}
+                      className="flex items-center gap-2.5 text-[14px] text-[#1d1d1f]"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                      <span dangerouslySetInnerHTML={{ __html: b }} />
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Featured Work ── */}
+      {/* ── Featured Work / GymRoam ── */}
       <section id="work" className="scroll-mt-12 py-28 px-6 lg:py-36">
         <div className="mx-auto max-w-[980px]">
-          <h2 className="text-center text-[40px] font-semibold leading-[1.1] tracking-tight text-[#1d1d1f] sm:text-[48px]">
-            Featured work.
+          <p className="text-center text-[12px] font-medium uppercase tracking-[0.18em] text-[#86868b]">
+            Flagship Product
+          </p>
+          <h2 className="mt-3 text-center text-[40px] font-semibold leading-[1.1] tracking-tight text-[#1d1d1f] sm:text-[48px]">
+            Built in-house. Built to ship.
           </h2>
-          <p className="mx-auto mt-6 max-w-[520px] text-center text-[17px] leading-[1.47] text-[#86868b]">
-            Products we&apos;ve helped bring to life.
+          <p className="mx-auto mt-6 max-w-[560px] text-center text-[17px] leading-[1.47] text-[#86868b]">
+            We don&apos;t just build apps for clients — we build our own. GymRoam
+            is our flagship, and proof of what comes out of this studio.
           </p>
 
-          <div className="mt-20 overflow-hidden rounded-3xl bg-[#f5f5f7]">
+          <div className="mt-20 overflow-hidden rounded-3xl bg-[#0a0a0a]">
             <div className="grid md:grid-cols-2">
               {/* Visual */}
-              <div className="flex flex-col items-center justify-center px-10 py-20 md:py-24">
-                <div className="h-24 w-24 overflow-hidden rounded-[22px] shadow-lg">
-                  <img src="/gymroam-logo.png" alt="GymRoam logo" className="h-full w-full object-cover" />
+              <div className="relative flex flex-col items-center justify-center overflow-hidden px-10 py-24 md:py-28">
+                <div
+                  className="pointer-events-none absolute inset-0 opacity-20"
+                  style={{
+                    background:
+                      "radial-gradient(circle at 50% 40%, #E8FF3C 0%, transparent 60%)",
+                  }}
+                />
+                <div className="relative z-10 h-28 w-28 overflow-hidden rounded-[26px] shadow-2xl ring-1 ring-white/10">
+                  <img
+                    src="/gymroam-logo.png"
+                    alt="GymRoam"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
-                <h3 className="mt-6 text-[28px] font-semibold text-[#1d1d1f]">GymRoam</h3>
-                <span className="mt-3 text-[12px] font-medium uppercase tracking-wider text-[#86868b]">
-                  Coming Soon
+                <h3 className="relative z-10 mt-7 text-[36px] font-semibold tracking-tight text-white">
+                  GymRoam
+                </h3>
+                <span className="relative z-10 mt-3 inline-flex items-center gap-2 rounded-full bg-[#E8FF3C] px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-black">
+                  <span className="h-1.5 w-1.5 rounded-full bg-black" />
+                  Launching Soon
                 </span>
-              </div>
-              {/* Description */}
-              <div className="flex flex-col justify-center px-10 pb-16 md:py-24 md:pr-14 md:pl-4">
-                <p className="text-[17px] leading-[1.53] text-[#1d1d1f]">
-                  An AI-powered fitness app that helps travelers find the best gyms,
-                  studios, and workout spots wherever they are. We designed and
-                  developed GymRoam from the ground up — intelligent recommendations,
-                  location awareness, and a seamless mobile experience.
+                <p className="relative z-10 mt-4 text-[12px] uppercase tracking-[0.18em] text-[#86868b]">
+                  iOS · App Store
                 </p>
+              </div>
+
+              {/* Description */}
+              <div className="flex flex-col justify-center px-10 pb-16 md:py-28 md:pr-14 md:pl-4">
+                <p className="text-[19px] leading-[1.5] text-white">
+                  Train anywhere. The AI-powered fitness companion for travelers
+                  and locals — find the best gyms, studios, and workout spots
+                  wherever life takes you.
+                </p>
+                <p className="mt-5 text-[15px] leading-[1.6] text-[#86868b]">
+                  Designed, engineered, and shipped from our studio. Intelligent
+                  recommendations, location-aware discovery, and a mobile
+                  experience built to feel effortless.
+                </p>
+
                 <div className="mt-8 flex flex-wrap gap-2">
-                  {["Mobile App", "AI Recommendations", "Location Intelligence", "UX Design"].map((tag) => (
+                  {[
+                    "iOS App",
+                    "AI Recommendations",
+                    "Location Intelligence",
+                    "UX Design",
+                  ].map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-white/80 px-3.5 py-1.5 text-[12px] font-medium text-[#86868b]"
+                      className="rounded-full bg-white/[0.08] px-3.5 py-1.5 text-[12px] font-medium text-[#d2d2d7]"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
+
+                <div className="mt-10 flex flex-wrap items-center gap-5">
+                  <a
+                    href="https://instagram.com/gymroamapp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-[#E8FF3C] px-5 py-2.5 text-[14px] font-semibold text-black transition-transform hover:scale-[1.02]"
+                  >
+                    Follow @gymroamapp
+                  </a>
+                  <a
+                    href="https://instagram.com/gymroamapp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[14px] font-medium text-white/70 hover:text-white transition-colors"
+                  >
+                    Get early access&nbsp;&rsaquo;
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+
+          <p className="mt-10 text-center text-[14px] text-[#86868b]">
+            Have an app idea of your own?{" "}
+            <a href="#contact" className="text-primary hover:underline">
+              Let&apos;s build it.
+            </a>
+          </p>
         </div>
       </section>
 
@@ -170,14 +241,13 @@ export default function Home() {
             A startup on a mission.
           </h2>
           <p className="mt-7 text-[21px] leading-[1.38] text-[#86868b]">
-            We&apos;re a small team of engineers and builders who believe AI should
-            be accessible to every business — not just big tech. We work hands-on
-            with companies to implement practical AI solutions that make a real
-            difference.
+            We&apos;re a lean studio of engineers and designers who build apps
+            from scratch and bring AI into the businesses that need it. We move
+            fast, ship real software, and stay close to the work.
           </p>
           <p className="mt-5 text-[17px] leading-[1.47] text-[#6e6e73]">
-            No hype. No buzzwords. Just real solutions, delivered by people
-            who care about your success.
+            No hype. No buzzwords. Just well-built products, delivered by
+            people who care about your success.
           </p>
 
           <div className="mt-20 grid gap-px overflow-hidden rounded-2xl bg-[#424245] sm:grid-cols-3">
@@ -236,18 +306,29 @@ export default function Home() {
 
           <form
             className="mt-14 space-y-5"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
+              if (status === "submitting") return;
               const form = e.currentTarget;
               const data = new FormData(form);
-              const name = String(data.get("name") ?? "").trim();
-              const email = String(data.get("email") ?? "").trim();
-              const message = String(data.get("message") ?? "").trim();
-              const subject = `New inquiry from ${name || "levestudios.com"}`;
-              const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
-              window.location.href = `mailto:AF@levestudios.com?subject=${encodeURIComponent(
-                subject
-              )}&body=${encodeURIComponent(body)}`;
+              const payload = {
+                name: String(data.get("name") ?? "").trim(),
+                email: String(data.get("email") ?? "").trim(),
+                message: String(data.get("message") ?? "").trim(),
+              };
+              setStatus("submitting");
+              try {
+                const res = await fetch("/api/contact", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(payload),
+                });
+                if (!res.ok) throw new Error("Request failed");
+                setStatus("success");
+                form.reset();
+              } catch {
+                setStatus("error");
+              }
             }}
           >
             <div className="grid gap-5 sm:grid-cols-2">
@@ -273,25 +354,30 @@ export default function Home() {
               placeholder="Tell us about your project..."
               className="w-full rounded-xl border-0 bg-white px-5 py-4 text-[15px] text-[#1d1d1f] placeholder:text-[#86868b] outline-none ring-1 ring-[#d2d2d7] focus:ring-2 focus:ring-primary transition-all resize-none"
             />
-            <div className="pt-3">
+            <div className="pt-3 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <button
                 type="submit"
-                className="rounded-full bg-primary px-7 py-3 text-[17px] font-normal text-white hover:bg-primary-dark transition-colors"
+                disabled={status === "submitting" || status === "success"}
+                className="rounded-full bg-primary px-7 py-3 text-[17px] font-normal text-white hover:bg-primary-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Send message
+                {status === "submitting"
+                  ? "Sending…"
+                  : status === "success"
+                  ? "Message sent"
+                  : "Send message"}
               </button>
+              {status === "success" && (
+                <p className="text-[14px] text-[#1d1d1f]">
+                  Thanks — we&apos;ll be in touch shortly.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-[14px] text-[#b42318]">
+                  Something went wrong. Please try again.
+                </p>
+              )}
             </div>
           </form>
-
-          <p className="mt-8 text-center text-[13px] text-[#86868b]">
-            Or reach us directly at{" "}
-            <a
-              href="mailto:AF@levestudios.com"
-              className="text-primary hover:underline"
-            >
-              AF@levestudios.com
-            </a>
-          </p>
 
         </div>
       </section>
@@ -300,7 +386,7 @@ export default function Home() {
       <footer className="border-t border-[#d2d2d7] bg-[#f5f5f7] py-10 px-6">
         <div className="mx-auto flex max-w-[980px] flex-col items-center gap-5 sm:flex-row sm:justify-between">
           <p className="text-[12px] text-[#6e6e73]">
-            &copy; {new Date().getFullYear()} Leve AI Studios. All rights reserved.
+            &copy; {new Date().getFullYear()} Leve AI Studios LLC. All rights reserved.
           </p>
           <div className="flex gap-7">
             {["Services", "Work", "About", "Process", "Contact"].map((item) => (
